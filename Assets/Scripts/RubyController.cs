@@ -146,9 +146,9 @@ PlaySound(Defeat);
             }
 if (score == 4)
 {
-    leveltwo = true;
+    leveltwo = false;
     leveltwoTextObject.SetActive(true);
-    level = 2;
+    level = 1;
     cog = 4;
 }
         
