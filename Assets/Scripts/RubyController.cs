@@ -147,7 +147,7 @@ public class RubyController : MonoBehaviour
         if (score == 4)
         {
             leveltwo = false;
-            leveltwoTextObject.SetActive(true);
+            leveltwoTextObject.SetActive(false);
             level = 1;
             cog = 4;
         }
