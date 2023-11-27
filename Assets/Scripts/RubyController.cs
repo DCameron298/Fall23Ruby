@@ -130,6 +130,10 @@ public class RubyController : MonoBehaviour
             {
                 Application.LoadLevel(Application.loadedLevel);
             }
+            if (score == 4)
+            {
+                Application.LoadLevel(Application.loadedLevel);
+            }
         }
 
         if ((score == 4) && (Input.GetKeyDown(KeyCode.X)))
