@@ -169,7 +169,7 @@ animator.SetFloat("Speed", move.magnitude);
                 isInvincible = false;
         }
    
-   if ((score == 5) && (leveltwo = true))
+   if ((score == 4))
    {
 playerWin = true;
 winTextObject.SetActive(true);
