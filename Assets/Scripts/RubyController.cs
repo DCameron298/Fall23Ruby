@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class RubyController : MonoBehaviour
 {
     public float speed = 3.0f;
-    
+
     public int maxHealth = 5;
     public float timeInvincible = 2.0f;
 
@@ -20,23 +20,23 @@ public class RubyController : MonoBehaviour
     public GameObject loseTextObject;
     public GameObject winTextObject;
     public GameObject leveltwoTextObject;
-    
+
     public TextMeshProUGUI cogText;
 
     public int level;
-    
-    public int health { get { return currentHealth; }}
-     public int currentHealth;
-    
+
+    public int health { get { return currentHealth; } }
+    public int currentHealth;
+
     bool isInvincible;
     float invincibleTimer;
-    
+
     Rigidbody2D rigidbody2d;
     float horizontal;
     float vertical;
-    Vector2 lookDirection = new Vector2(1,0);
+    Vector2 lookDirection = new Vector2(1, 0);
     Animator animator;
-    
+
     private bool playerLose;
     private bool playerWin;
     private bool leveltwo;
@@ -56,20 +56,20 @@ public class RubyController : MonoBehaviour
         rigidbody2d = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
-         audioSource = GetComponent<AudioSource>();
-         cog = 4;
-         score = 0;
-         level = 1;
+        audioSource = GetComponent<AudioSource>();
+        cog = 4;
+        score = 0;
+        level = 1;
 
-         playerLose = false;
-         playerWin = false;
-         leveltwo = false;
+        playerLose = false;
+        playerWin = false;
+        leveltwo = false;
 
         winTextObject.SetActive(false);
         loseTextObject.SetActive(false);
         leveltwoTextObject.SetActive(false);
-        
-    
+
+
     }
 
     // Update is called once per frame
@@ -79,115 +79,115 @@ public class RubyController : MonoBehaviour
         vertical = Input.GetAxis("Vertical");
         Vector2 move = new Vector2(horizontal, vertical);
         if (Input.GetKeyDown(KeyCode.X))
-{
-    RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
-   if (hit.collider != null)
-{
-    NonPlayerCharacter character = hit.collider.GetComponent<NonPlayerCharacter>();
-    if (character != null)
-    {
-        character.DisplayDialog();
-        PlaySound(JambiSpeak);
-    }  
-}
-}
-
-if (score == 5)
-{
-    if(Input.GetKeyDown(KeyCode.R))
-    {
-        SceneManager.LoadScene("T3");
-    }
-
-    
-}
-
-if (cog == 0)
-{
-    PlaySound(NoCogs);
-}
-
-        if(Input.GetKeyDown(KeyCode.C) && (cog >= 1))
-{
-   Launch();
-   PlaySound(throwSound);
-
-   cog -= 1;
-    cogText.text = "Cogs: " + cog.ToString();
-}
-
-if (currentHealth == 0)
-{
-speed = 0;
-playerLose = true;
-loseTextObject.SetActive(true);
-PlaySound(Defeat);
-}
-
- if(Input.GetKey(KeyCode.R))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
+            if (hit.collider != null)
             {
-                if(currentHealth == 0)
+                NonPlayerCharacter character = hit.collider.GetComponent<NonPlayerCharacter>();
+                if (character != null)
                 {
-                    Application.LoadLevel(Application.loadedLevel);
+                    character.DisplayDialog();
+                    PlaySound(JambiSpeak);
                 }
             }
+        }
 
-            if ((score == 4) && (Input.GetKeyDown(KeyCode.X)))
+        if (score == 5)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
             {
-                            RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
-                if (hit.collider != null)
+                SceneManager.LoadScene("T3");
+            }
+
+
+        }
+
+        if (cog == 0)
+        {
+            PlaySound(NoCogs);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C) && (cog >= 1))
+        {
+            Launch();
+            PlaySound(throwSound);
+
+            cog -= 1;
+            cogText.text = "Cogs: " + cog.ToString();
+        }
+
+        if (currentHealth == 0)
+        {
+            speed = 0;
+            playerLose = true;
+            loseTextObject.SetActive(true);
+            PlaySound(Defeat);
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            if (currentHealth == 0)
+            {
+                Application.LoadLevel(Application.loadedLevel);
+            }
+        }
+
+        if ((score == 4) && (Input.GetKeyDown(KeyCode.X)))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
+            if (hit.collider != null)
+            {
+                NonPlayerCharacter character = hit.collider.GetComponent<NonPlayerCharacter>();
+                if (character != null)
                 {
-                    NonPlayerCharacter character = hit.collider.GetComponent<NonPlayerCharacter>();
-                    if (character != null)
-                    {
-                        SceneManager.LoadScene("Level2");
-                    }
+                    SceneManager.LoadScene("Level2");
                 }
             }
-if (score == 4)
-{
-    leveltwo = false;
-    leveltwoTextObject.SetActive(true);
-    level = 1;
-    cog = 4;
-}
-        
-if(!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
-{
-    lookDirection.Set(move.x, move.y);
-    lookDirection.Normalize();
-}
-        
-animator.SetFloat("Look X", lookDirection.x);
-animator.SetFloat("Look Y", lookDirection.y);
-animator.SetFloat("Speed", move.magnitude);
-        
+        }
+        if (score == 4)
+        {
+            leveltwo = false;
+            leveltwoTextObject.SetActive(true);
+            level = 1;
+            cog = 4;
+        }
+
+        if (!Mathf.Approximately(move.x, 0.0f) || !Mathf.Approximately(move.y, 0.0f))
+        {
+            lookDirection.Set(move.x, move.y);
+            lookDirection.Normalize();
+        }
+
+        animator.SetFloat("Look X", lookDirection.x);
+        animator.SetFloat("Look Y", lookDirection.y);
+        animator.SetFloat("Speed", move.magnitude);
+
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
             if (invincibleTimer < 0)
                 isInvincible = false;
         }
-   
-   if ((score == 4))
-   {
-playerWin = true;
-winTextObject.SetActive(true);
-speed = 0;
-PlaySound(Victory);
-   }
 
-   if((level == 2) && (currentHealth == 0) && (Input.GetKey(KeyCode.R)))
-            {
-                SceneManager.LoadScene("T3");
-                loseTextObject.SetActive(true);
-            }
-   
-   
-   
-   
+        if ((score == 4))
+        {
+            playerWin = true;
+            winTextObject.SetActive(true);
+            speed = 0;
+            PlaySound(Victory);
+        }
+
+        if ((level == 2) && (currentHealth == 0) && (Input.GetKey(KeyCode.R)))
+        {
+            SceneManager.LoadScene("T3");
+            loseTextObject.SetActive(true);
+        }
+
+
+
+
     }
-    
+
     void FixedUpdate()
     {
         Vector2 position = rigidbody2d.position;
@@ -204,10 +204,10 @@ PlaySound(Victory);
             animator.SetTrigger("Hit");
             if (isInvincible)
                 return;
-            
+
             isInvincible = true;
             invincibleTimer = timeInvincible;
-           GameObject hitEffectObject = Instantiate(hitEffect, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+            GameObject hitEffectObject = Instantiate(hitEffect, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
             PlaySound(hitSound);
         }
 
@@ -215,16 +215,16 @@ PlaySound(Victory);
         {
             GameObject healthEffectObject = Instantiate(healthEffect, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
         }
-        
+
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log(currentHealth + "/" + maxHealth);
-          
-        
+
+
         UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
     }
 
     void Launch()
- {
+    {
         GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
 
         Projectile projectile = projectileObject.GetComponent<Projectile>();
@@ -232,19 +232,19 @@ PlaySound(Victory);
 
         animator.SetTrigger("Launch");
     }
-     public void PlaySound(AudioClip throwSound)
+    public void PlaySound(AudioClip throwSound)
     {
         audioSource.PlayOneShot(throwSound);
     }
 
-   public void ChangeScore(int amount)
+    public void ChangeScore(int amount)
     {
         score += 1;
         scoreText.text = "Robots Fixed: " + score.ToString();
 
-       
-        
-       
+
+
+
 
     }
 
@@ -256,9 +256,9 @@ PlaySound(Victory);
     }
 
     public void ChangeSpeed()
-{
-speed +=4;
+    {
+        speed += 4;
 
-}    
-    
+    }
+
 }
