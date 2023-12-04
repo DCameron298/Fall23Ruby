@@ -49,6 +49,7 @@ public class RubyController : MonoBehaviour
     public AudioClip NoCogs;
     public AudioClip Victory;
     public AudioClip Defeat;
+    public AudioClip StartUp;
     public int cog;
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,7 @@ public class RubyController : MonoBehaviour
         winTextObject.SetActive(false);
         loseTextObject.SetActive(false);
         leveltwoTextObject.SetActive(false);
+        PlaySound(StartUp);
 
 
     }
@@ -115,8 +117,16 @@ public class RubyController : MonoBehaviour
             cog -= 1;
             cogText.text = "Cogs: " + cog.ToString();
         }
+            //Makes it so that if you hit too many objects and can't move you also lose (A.S)
+      if (currentHealth == 0)
+        {
+            speed = 0;
+            playerLose = true;
+            loseTextObject.SetActive(true);
+            PlaySound(Defeat);
+        }
 
-        if (currentHealth == 0)
+        if (speed <= 0)
         {
             speed = 0;
             playerLose = true;
@@ -135,7 +145,7 @@ public class RubyController : MonoBehaviour
                 Application.LoadLevel(Application.loadedLevel);
             }
         }
-
+        // lets the player advance after talking to Jambi
         if ((score == 4) && (Input.GetKeyDown(KeyCode.X)))
         {
             RaycastHit2D hit = Physics2D.Raycast(rigidbody2d.position + Vector2.up * 0.2f, lookDirection, 1.5f, LayerMask.GetMask("NPC"));
@@ -145,14 +155,16 @@ public class RubyController : MonoBehaviour
                 if (character != null)
                 {
                     SceneManager.LoadScene("Level2");
+                    level += 1;
                 }
+                
             }
         }
+        //enables the player to progress to level 2 after beating level 1 (C.D)
         if (score == 4)
         {
-            leveltwo = false;
-            leveltwoTextObject.SetActive(false);
-            level = 1;
+            leveltwo = true;
+            leveltwoTextObject.SetActive(true);
             cog = 4;
         }
 
@@ -172,19 +184,20 @@ public class RubyController : MonoBehaviour
             if (invincibleTimer < 0)
                 isInvincible = false;
         }
-
-        if ((score == 4))
+        //Sets the score goal for level 2 i could make it so its a score of 5 and has to be on level 2 but a score of 5 is impossible on level 1 so it's ok (C.D)
+        if ((score == 5) && (SceneManager.GetActiveScene().name == "Level2"))
         {
             playerWin = true;
             winTextObject.SetActive(true);
-            speed = 0;
+            speed = 1;
             PlaySound(Victory);
         }
-
+        //makes it so that if you die on level 2 you restart on level 1 (C.D)
         if ((level == 2) && (currentHealth == 0) && (Input.GetKey(KeyCode.R)))
         {
             SceneManager.LoadScene("T3");
             loseTextObject.SetActive(true);
+            playerLose = true;
         }
 
 
@@ -258,11 +271,16 @@ public class RubyController : MonoBehaviour
         cogText.text = "Cogs: " + cog.ToString();
 
     }
-
+        //Used so the star pick up can do its job (C.D)
     public void ChangeSpeed()
     {
         speed += 4;
 
+    }
+//Used to slow Ruby down when she hits boxes (A.S)
+    public void SlowSpeed()
+    {
+        speed -= 4;
     }
 
 }
